@@ -54,10 +54,11 @@ while True:
         print('recording stopped, and segment saved as '+segName)
 
         # Delete file counter-2 if it exists
-        if counter > 1:
+        try:
             os.remove("vids/dash"+str(counter-2)+".h264")
             print("removed: vids/dash"+str(counter-2)+".h264")
-
+        except FileNotFoundError:
+            pass
         counter += 1  # Decrement counter
 
     except KeyboardInterrupt:
