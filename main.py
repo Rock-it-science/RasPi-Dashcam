@@ -16,7 +16,6 @@ counter = 0
 
 while True:
     try:
-        counter += 1  # Decrement counter
         # Set file name for current video segment
         segName = 'vids/dash'+str(counter)+'.h264'
         # Start recording
@@ -30,8 +29,9 @@ while True:
         # Delete file counter-2 if it exists
         if (counter - 2) > 0:
             os.remove("vids/dash"+str(counter-2)+",h264")
-            print("removed: vids/dash"+str(counter-2)+",h264")
+            print("removed: vids/dash"+str(counter-2)+".h264")
 
+        counter += 1  # Decrement counter
 
     except KeyboardInterrupt:
         print('interrupted, saving last segment and exiting')
