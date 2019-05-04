@@ -15,13 +15,11 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(12, GPIO.OUT)
 
-'''
+
 # Get counter from counter.txt
 file = open("counter.txt", "r")
 counter = int(file.read())  # counts number of video files
 file.close()
-'''
-counter = 0
 
 while True:
     try:
@@ -44,6 +42,11 @@ while True:
                 for f in files:
                     shutil.move('vids/' + f, 'vids/saved')
                 GPIO.output(12, GPIO.LOW)  # Turn off LED
+
+                # Start recording again
+                camera.start_recording(segName)
+                print('now recording')
+
             recordTime -= 1  # Decrement recordTime
 
         # Stop recording
