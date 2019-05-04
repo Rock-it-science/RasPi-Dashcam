@@ -2,6 +2,7 @@ import os
 import RPi.GPIO as GPIO
 import shutil
 import sys
+import time
 
 #Camera setup
 import picamera
@@ -17,7 +18,7 @@ GPIO.setup(12, GPIO.OUT)
 
 # Get counter from counter.txt
 file = open("counter.txt", "r")
-counter = int(file.read())  # counts number of video files
+counter = int(file.read())+1  # counts number of video files
 file.close()
 
 while True:
@@ -35,11 +36,17 @@ while True:
             if GPIO.input(10) == GPIO.HIGH:
                 print("Button pressed, saving last and current file to /vids/saved")
                 GPIO.output(12, GPIO.HIGH)  # Turn on LED
-                camera.stop_recording()
+                camera.stop_recording()  # Stop recording
+
                 # Lock in current file and last one
                 files = os.listdir('vids')
-                for f in files:
-                    shutil.move('vids/' + f, 'vids/saved')
+                try:
+                    for f in files:
+                        shutil.move('vids/' + f, 'vids/saved')
+                except:
+                    print('Video already saved')
+
+                time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
                 GPIO.output(12, GPIO.LOW)  # Turn off LED
 
                 # Start recording again
@@ -67,7 +74,7 @@ while True:
         # Turn off recording if its on
         try:
             camera.stop_recording()
-        except:
+        except:  # If its not recording, do nothing
             pass
 
         # write counter to file
