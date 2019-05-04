@@ -41,7 +41,7 @@ while True:
                 # Lock in current file and last one
                 files = os.listdir('vids')
                 for f in files:
-                    shutil.move('vids' + f, 'vids/saved')
+                    shutil.move('vids/' + f, 'vids/saved')
                 GPIO.output(12, GPIO.LOW)  # Turn off LED
             camera.wait_recording(1)
             recordTime -= 1  # Decrement recordTime
