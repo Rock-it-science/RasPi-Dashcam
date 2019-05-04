@@ -8,7 +8,7 @@ camera.resolution = (1280, 720)
 
 # Get counter from counter.txt
 file = open("counter.txt", "r")
-counter = file.read  # counts number of video files
+counter = file.read()  # counts number of video files
 file.close()
 
 while True:
