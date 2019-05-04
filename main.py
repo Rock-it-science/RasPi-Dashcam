@@ -12,7 +12,7 @@ counter = 0  # counts number of video files
 while True:
     try:
         # Set file name for current video segment
-        segName = 'dash'+str(counter)+'.h264'
+        segName = 'vids/dash'+str(counter)+'.h264'
         # Start recording
         camera.start_recording(segName)
         print('now recording')
