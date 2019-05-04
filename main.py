@@ -6,13 +6,15 @@ import picamera
 camera = picamera.PiCamera()
 camera.resolution = (1280, 720)
 
-counter = 0  # counts number of video files
-# TODO Read/write counter from/to file so it doesn't reset every time the program is ran
+# Get counter from counter.txt
+file = open("counter.txt", "r")
+counter = file.read  # counts number of video files
+file.close()
 
 while True:
     try:
         # Set file name for current video segment
-        segName = 'vids/dash'+str(counter)+'.h264'
+        segName = 'vids/dash'+counter+'.h264'
         # Start recording
         camera.start_recording(segName)
         print('now recording')
@@ -24,6 +26,11 @@ while True:
     except KeyboardInterrupt:
         print('interrupted, saving last segment and exiting')
         camera.stop_recording()
+        # write counter to file
+        file = open("counter.txt", "w")
+        file.write(counter)
+        file.close()
+        # Exit
         try:
             sys.exit(0)
         except SystemExit:
