@@ -1,10 +1,17 @@
-import sys
 import os
+import RPi.GPIO as GPIO
+import shutil
+import sys
 
 #Camera setup
 import picamera
 camera = picamera.PiCamera()
 camera.resolution = (1280, 720)
+
+# GPIO setup for button
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 '''
 # Get counter from counter.txt
@@ -32,6 +39,15 @@ while True:
             print("removed: vids/dash"+str(counter-2)+".h264")
 
         counter += 1  # Decrement counter
+
+    except GPIO.input(10) == GPIO.HIGH:
+        print("Button pressed, saving files to /vids/saved")
+        camera.stop_recording()
+        # Lock in current file and last one
+        files = os.listdir('vids')
+        for f in files:
+            shutil.move('vids'+f, 'vids/saved')
+        # TODO return to saving new footage after this
 
     except KeyboardInterrupt:
         print('interrupted, saving last segment and exiting')
