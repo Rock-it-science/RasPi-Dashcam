@@ -2,7 +2,6 @@ import os
 import RPi.GPIO as GPIO
 import shutil
 import sys
-import time
 
 #Camera setup
 import picamera
@@ -57,7 +56,7 @@ while True:
         try:
             os.remove("vids/dash"+str(counter-2)+".h264")
             print("removed: vids/dash"+str(counter-2)+".h264")
-        except FileExistsError:
+        except IOError:
             pass
         counter += 1  # Decrement counter
 
