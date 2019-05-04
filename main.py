@@ -34,6 +34,7 @@ while True:
         # Record, but stop if button is pressed
         recordTime = 5 # Set this to how many seconds to make each segment
         while recordTime > 0:
+            camera.wait_recording(1)
             if GPIO.input(10) == GPIO.HIGH:
                 print("Button pressed, saving last and current file to /vids/saved")
                 GPIO.output(12, GPIO.HIGH)  # Turn on LED
@@ -43,7 +44,6 @@ while True:
                 for f in files:
                     shutil.move('vids/' + f, 'vids/saved')
                 GPIO.output(12, GPIO.LOW)  # Turn off LED
-            camera.wait_recording(1)
             recordTime -= 1  # Decrement recordTime
 
         # Stop recording
