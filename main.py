@@ -2,16 +2,18 @@ import os
 import RPi.GPIO as GPIO
 import shutil
 import sys
+import time
 
 #Camera setup
 import picamera
 camera = picamera.PiCamera()
 camera.resolution = (1280, 720)
 
-# GPIO setup for button
+# GPIO setup for button and LED
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(12, GPIO.OUT)
 
 '''
 # Get counter from counter.txt
@@ -28,7 +30,23 @@ while True:
         # Start recording
         camera.start_recording(segName)
         print('now recording')
-        camera.wait_recording(5)  # Continue recording for 10 seconds
+
+        # Record, but stop if button is pressed
+        recordTime = 5 # Set this to how many seconds to make each segment
+        while recordTime > 0:
+            print("Button pressed, saving last and current file to /vids/saved")
+            GPIO.output(12, GPIO.HIGH)  # Turn on LED
+            camera.wait_recording(1)
+            if GPIO.input(10) == GPIO.HIGH:
+                print("Button pressed, saving files to /vids/saved")
+                camera.stop_recording()
+                # Lock in current file and last one
+                files = os.listdir('vids')
+                for f in files:
+                    shutil.move('vids' + f, 'vids/saved')
+            GPIO.output(12, GPIO.LOW)  # Turn off LED
+            recordTime -= 1  # Decrement recordTime
+
         # Stop recording
         camera.stop_recording()
         print('recording stopped, and segment saved as '+segName)
@@ -39,15 +57,6 @@ while True:
             print("removed: vids/dash"+str(counter-2)+".h264")
 
         counter += 1  # Decrement counter
-
-    except GPIO.input(10) == GPIO.HIGH:
-        print("Button pressed, saving files to /vids/saved")
-        camera.stop_recording()
-        # Lock in current file and last one
-        files = os.listdir('vids')
-        for f in files:
-            shutil.move('vids'+f, 'vids/saved')
-        # TODO return to saving new footage after this
 
     except KeyboardInterrupt:
         print('interrupted, saving last segment and exiting')
