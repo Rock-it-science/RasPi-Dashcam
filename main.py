@@ -60,10 +60,11 @@ while True:
             pass
         counter += 1  # Decrement counter
 
-    except:
+    except Exception as e:
         print('interrupted, saving last segment and exiting')
+        print(e)
 
-        # Turn off recording it its on
+        # Turn off recording if its on
         try:
             camera.stop_recording()
         except:
