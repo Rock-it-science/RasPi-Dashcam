@@ -8,13 +8,13 @@ camera.resolution = (1280, 720)
 
 # Get counter from counter.txt
 file = open("counter.txt", "r")
-counter = file.read()  # counts number of video files
+counter = int(file.read())  # counts number of video files
 file.close()
 
 while True:
     try:
         # Set file name for current video segment
-        segName = 'vids/dash'+counter+'.h264'
+        segName = 'vids/dash'+str(counter)+'.h264'
         # Start recording
         camera.start_recording(segName)
         print('now recording')
@@ -28,7 +28,7 @@ while True:
         camera.stop_recording()
         # write counter to file
         file = open("counter.txt", "w")
-        file.write(counter)
+        file.write(str(counter))
         file.close()
         # Exit
         try:
