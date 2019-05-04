@@ -57,7 +57,7 @@ while True:
         try:
             os.remove("vids/dash"+str(counter-2)+".h264")
             print("removed: vids/dash"+str(counter-2)+".h264")
-        except FileNotFoundError:
+        except FileExistsError:
             pass
         counter += 1  # Decrement counter
 
