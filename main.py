@@ -62,7 +62,12 @@ while True:
 
     except:
         print('interrupted, saving last segment and exiting')
-        camera.stop_recording()
+
+        # Turn off recording it its on
+        try:
+            camera.stop_recording()
+        except:
+            pass
 
         # write counter to file
         file = open("counter.txt", "w")
