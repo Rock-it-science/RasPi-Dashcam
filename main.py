@@ -28,7 +28,7 @@ while True:
 
         # Delete file counter-2 if it exists
         if (counter - 2) > 0:
-            os.remove("vids/dash"+str(counter-2)+",h264")
+            os.remove("vids/dash"+str(counter-2)+".h264")
             print("removed: vids/dash"+str(counter-2)+".h264")
 
         counter += 1  # Decrement counter
