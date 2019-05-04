@@ -60,15 +60,18 @@ while True:
             pass
         counter += 1  # Decrement counter
 
-    except KeyboardInterrupt:
+    except:
         print('interrupted, saving last segment and exiting')
         camera.stop_recording()
-        '''
+
         # write counter to file
         file = open("counter.txt", "w")
         file.write(str(counter))
         file.close()
-        '''
+
+        # Make sure LED is off
+        GPIO.output(12, GPIO.LOW)
+
         # Exit
         try:
             sys.exit(0)
