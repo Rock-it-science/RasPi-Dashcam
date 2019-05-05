@@ -32,7 +32,9 @@ while True:
     # Record, but stop if button is pressed
     recordTime = 600  # Set this to how many seconds to make each segment
     while recordTime > 0:
+
         camera.wait_recording(1)
+
         if GPIO.input(10) == GPIO.HIGH:
             print("Button pressed, saving last and current file to usb drive")
             GPIO.output(12, GPIO.HIGH)  # Turn on LED
@@ -65,5 +67,13 @@ while True:
         print("removed: vids/dash"+str(counter-2)+".h264")
     except OSError:
         pass
-    counter += 1  # Decrement counter
+    counter += 1  # Increment counter
+
+    # write counter to file
+    file = open("counter.txt", "w")
+    file.write(str(counter))
+    file.close()
+
+    # Make sure LED is off
+    GPIO.output(12, GPIO.LOW)
 
