@@ -23,16 +23,16 @@ counter = int(file.read())+1  # counts number of video files
 file.close()
 
 while True:
-    try:
-        # Set file name for current video segment
-        segName = 'vids/dash'+str(counter)+'.h264'
-        # Start recording
-        camera.start_recording(segName)
-        print('now recording')
+    # Set file name for current video segment
+    segName = 'vids/dash'+str(counter)+'.h264'
+    # Start recording
+    camera.start_recording(segName)
+    print('now recording')
 
-        # Record, but stop if button is pressed
-        recordTime = 600  # Set this to how many seconds to make each segment
-        while recordTime > 0:
+    # Record, but stop if button is pressed
+    recordTime = 600  # Set this to how many seconds to make each segment
+    while recordTime > 0:
+        try:
             camera.wait_recording(1)
             if GPIO.input(10) == GPIO.HIGH:
                 print("Button pressed, saving last and current file to usb drive")
@@ -56,38 +56,39 @@ while True:
 
             recordTime -= 1  # Decrement recordTime
 
-        # Stop recording
-        camera.stop_recording()
-        print('recording stopped, and segment saved as '+segName)
+        except Exception as e:
+            print('interrupted, saving last segment and exiting')
+            print(e)
 
-        # Delete file counter-2 if it exists
-        try:
-            os.remove("vids/dash"+str(counter-2)+".h264")
-            print("removed: vids/dash"+str(counter-2)+".h264")
-        except OSError:
-            pass
-        counter += 1  # Decrement counter
+            # Turn off recording if its on
+            try:
+                camera.stop_recording()
+            except:  # If its not recording, do nothing
+                pass
 
-    except Exception as e:
-        print('interrupted, saving last segment and exiting')
-        print(e)
+            # write counter to file
+            file = open("counter.txt", "w")
+            file.write(str(counter))
+            file.close()
 
-        # Turn off recording if its on
-        try:
-            camera.stop_recording()
-        except:  # If its not recording, do nothing
-            pass
+            # Make sure LED is off
+            GPIO.output(12, GPIO.LOW)
 
-        # write counter to file
-        file = open("counter.txt", "w")
-        file.write(str(counter))
-        file.close()
+            # Exit
+            try:
+                sys.exit(0)
+            except SystemExit:
+                os._exit(0)
 
-        # Make sure LED is off
-        GPIO.output(12, GPIO.LOW)
+    # Stop recording
+    camera.stop_recording()
+    print('recording stopped, and segment saved as '+segName)
 
-        # Exit
-        try:
-            sys.exit(0)
-        except SystemExit:
-            os._exit(0)
+    # Delete file counter-2 if it exists
+    try:
+        os.remove("vids/dash"+str(counter-2)+".h264")
+        print("removed: vids/dash"+str(counter-2)+".h264")
+    except OSError:
+        pass
+    counter += 1  # Decrement counter
+
