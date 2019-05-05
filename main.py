@@ -7,7 +7,7 @@ import time
 #Camera setup
 import picamera
 camera = picamera.PiCamera()
-camera.resolution = (1280, 720)
+camera.resolution = (640, 480)
 camera.rotation = 180
 
 # GPIO setup for button and LED
