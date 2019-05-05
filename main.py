@@ -34,6 +34,7 @@ while True:
     while recordTime > 0:
         try:
             camera.wait_recording(1)
+
         except Exception as e:
             print('interrupted, saving last segment and exiting')
             print(e)
@@ -79,6 +80,7 @@ while True:
             print('now recording')
 
         recordTime -= 1  # Decrement recordTime
+
 
     # Stop recording
     camera.stop_recording()
