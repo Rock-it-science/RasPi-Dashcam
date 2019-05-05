@@ -36,7 +36,7 @@ while True:
         try:
             camera.wait_recording(1)
         except:
-            print('Keyboard interrupt')
+            sys.exit('Keyboard interrupt')
 
         if GPIO.input(10) == GPIO.HIGH:
             print("Button pressed, saving last and current file to usb drive")
