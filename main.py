@@ -42,7 +42,7 @@ while True:
                 files = os.listdir('vids')
                 try:
                     for f in files:
-                        shutil.move('vids/' + f, 'vids/saved')
+                        shutil.move('vids/' + f, '../../../../media/usb')
                 except:
                     print('Video already saved')
 
