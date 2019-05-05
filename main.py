@@ -8,6 +8,7 @@ import time
 import picamera
 camera = picamera.PiCamera()
 camera.resolution = (1280, 720)
+camera.rotation = 180
 
 # GPIO setup for button and LED
 GPIO.setwarnings(False)
@@ -30,11 +31,11 @@ while True:
         print('now recording')
 
         # Record, but stop if button is pressed
-        recordTime = 5 # Set this to how many seconds to make each segment
+        recordTime = 600  # Set this to how many seconds to make each segment
         while recordTime > 0:
             camera.wait_recording(1)
             if GPIO.input(10) == GPIO.HIGH:
-                print("Button pressed, saving last and current file to /vids/saved")
+                print("Button pressed, saving last and current file to usb drive")
                 GPIO.output(12, GPIO.HIGH)  # Turn on LED
                 camera.stop_recording()  # Stop recording
 
