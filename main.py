@@ -34,28 +34,6 @@ while True:
     while recordTime > 0:
         try:
             camera.wait_recording(1)
-            if GPIO.input(10) == GPIO.HIGH:
-                print("Button pressed, saving last and current file to usb drive")
-                GPIO.output(12, GPIO.HIGH)  # Turn on LED
-                camera.stop_recording()  # Stop recording
-
-                # Lock in current file and last one
-                files = os.listdir('vids')
-                try:
-                    for f in files:
-                        shutil.move('vids/' + f, '../../../../media/usb')
-                except:
-                    print('Video already saved')
-
-                time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
-                GPIO.output(12, GPIO.LOW)  # Turn off LED
-
-                # Start recording again
-                camera.start_recording(segName)
-                print('now recording')
-
-            recordTime -= 1  # Decrement recordTime
-
         except Exception as e:
             print('interrupted, saving last segment and exiting')
             print(e)
@@ -79,6 +57,28 @@ while True:
                 sys.exit(0)
             except SystemExit:
                 os._exit(0)
+
+        if GPIO.input(10) == GPIO.HIGH:
+            print("Button pressed, saving last and current file to usb drive")
+            GPIO.output(12, GPIO.HIGH)  # Turn on LED
+            camera.stop_recording()  # Stop recording
+
+            # Lock in current file and last one
+            files = os.listdir('vids')
+            try:
+                for f in files:
+                    shutil.move('vids/' + f, '../../../../media/usb')
+            except:
+                print('Video already saved')
+
+            time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
+            GPIO.output(12, GPIO.LOW)  # Turn off LED
+
+            # Start recording again
+            camera.start_recording(segName)
+            print('now recording')
+
+        recordTime -= 1  # Decrement recordTime
 
     # Stop recording
     camera.stop_recording()
