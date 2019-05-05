@@ -33,12 +33,18 @@ while True:
     recordTime = 600  # Set this to how many seconds to make each segment
     while recordTime > 0:
 
-        camera.wait_recording(1)
+        try:
+            camera.wait_recording(1)
+        except:
+            print('Keyboard interrupt')
 
         if GPIO.input(10) == GPIO.HIGH:
             print("Button pressed, saving last and current file to usb drive")
             GPIO.output(12, GPIO.HIGH)  # Turn on LED
             camera.stop_recording()  # Stop recording
+
+            time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
+            # and so RasPi has a chance to save the video
 
             # Lock in current file and last one
             files = os.listdir('vids')
@@ -48,7 +54,6 @@ while True:
             except:
                 print('Video already saved')
 
-            time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
             GPIO.output(12, GPIO.LOW)  # Turn off LED
 
             # Start recording again
