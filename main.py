@@ -32,33 +32,7 @@ while True:
     # Record, but stop if button is pressed
     recordTime = 600  # Set this to how many seconds to make each segment
     while recordTime > 0:
-        try:
-            camera.wait_recording(1)
-
-        except Exception as e:
-            print('interrupted, saving last segment and exiting')
-            print(e)
-
-            # Turn off recording if its on
-            try:
-                camera.stop_recording()
-            except:  # If its not recording, do nothing
-                pass
-
-            # write counter to file
-            file = open("counter.txt", "w")
-            file.write(str(counter))
-            file.close()
-
-            # Make sure LED is off
-            GPIO.output(12, GPIO.LOW)
-
-            # Exit
-            try:
-                sys.exit(0)
-            except SystemExit:
-                os._exit(0)
-
+        camera.wait_recording(1)
         if GPIO.input(10) == GPIO.HIGH:
             print("Button pressed, saving last and current file to usb drive")
             GPIO.output(12, GPIO.HIGH)  # Turn on LED
@@ -80,7 +54,6 @@ while True:
             print('now recording')
 
         recordTime -= 1  # Decrement recordTime
-
 
     # Stop recording
     camera.stop_recording()
