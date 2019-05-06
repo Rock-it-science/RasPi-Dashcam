@@ -36,6 +36,7 @@ while True:
         try:
             camera.wait_recording(1)
         except:
+            camera.stop_recording()
             sys.exit('Keyboard interrupt')
 
         if GPIO.input(10) == GPIO.HIGH:
@@ -55,6 +56,8 @@ while True:
                 print('Video already saved')
 
             GPIO.output(12, GPIO.LOW)  # Turn off LED
+
+            counter += 1  # Increment counter
 
             # Start recording again
             camera.start_recording(segName)
