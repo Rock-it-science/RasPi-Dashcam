@@ -34,8 +34,8 @@ def getVids():
 
 # Main loop for recording
 while True:
-    # Start recording
-    camera.start_recording(segName)
+    # Start recording to 'vids' directory
+    camera.start_recording("vids/"+segName)
     print('now recording')
 
     # Start recording, but stop if button is pressed
