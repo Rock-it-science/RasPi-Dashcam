@@ -1,12 +1,12 @@
-import os
-import RPi.GPIO as GPIO
 import datetime
+import os
+import picamera
+import RPi.GPIO as GPIO
 import sys
 import shutil
 import time
 
 # Camera setup
-import picamera
 camera = picamera.PiCamera()
 camera.resolution = (640, 480)
 camera.rotation = 180
@@ -47,7 +47,7 @@ while True:
             sys.exit('Keyboard interrupt')
 
         if GPIO.input(10) == GPIO.HIGH:
-            print("Button pressed, saving last and current file to usb drive")
+            print("Button pressed, saving last and current file")
             GPIO.output(12, GPIO.HIGH)  # Turn on LED
 
             # Split recording, saving footage up to this point to 'saved' directory
@@ -56,7 +56,7 @@ while True:
             # Move most recent file in vids to 'saved' folder
             files = getVids()  # Get names of files in vids
             recent = files[-1]  # Get most recent file
-            shutil.move("vids/"+recent, "vids/saved/"+recent)  # move file into 'saved' directory
+            shutil.move("/home/pi/projects/RasPi-Dashcam/vids/"+recent, "/home/pi/projects/RasPi-Dashcam/vids/saved/"+recent)  # move file into 'saved' directory (TODO change this to relative path)
 
             time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
 
