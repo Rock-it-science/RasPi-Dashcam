@@ -58,7 +58,7 @@ while True:
             # Move most recent file in vids to 'saved' folder
             files = getVids()  # Get names of files in vids
             recent = files[-1]  # Get most recent file
-            shutil.move("/home/pi/projects/RasPi-Dashcam/vids/"+recent, "/home/pi/projects/RasPi-Dashcam/vids/saved/"+recent)  # move file into 'saved' directory (TODO change this to relative path)
+            shutil.move(recent, "vids/saved/"+os.path.basename(recent))  # move file into 'saved' directory (TODO change this to relative path)
 
             time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
 
