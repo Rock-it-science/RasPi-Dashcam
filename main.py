@@ -1,10 +1,11 @@
 import os
 import RPi.GPIO as GPIO
-import shutil
+import datetime
 import sys
+import shutil
 import time
 
-#Camera setup
+# Camera setup
 import picamera
 camera = picamera.PiCamera()
 camera.resolution = (640, 480)
@@ -16,21 +17,27 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(12, GPIO.OUT)
 
+# Get date and time for file names
+now = datetime.datetime.now()
+segName = now.strftime()+'.h264'
 
-# Get counter from counter.txt
-file = open("counter.txt", "r")
-counter = int(file.read())+1  # counts number of video files
-file.close()
+# Function for getting names of files in 'vids' folder
+def getVids():
+    path = 'vids/'
+    files = []
+    for r, d, f in os.walk(path):
+        for file in f:
+            files.append(os.path.join(r, file))
+    return files
 
+# Main loop for recording
 while True:
-    # Set file name for current video segment
-    segName = 'vids/dash'+str(counter)+'.h264'
     # Start recording
     camera.start_recording(segName)
     print('now recording')
 
-    # Record, but stop if button is pressed
-    recordTime = 600  # Set this to how many seconds to make each segment
+    # Start recording, but stop if button is pressed
+    recordTime = 600  # Seconds per segment (approximately, actual time will be slightly longer)
     while recordTime > 0:
 
         try:
@@ -42,46 +49,26 @@ while True:
         if GPIO.input(10) == GPIO.HIGH:
             print("Button pressed, saving last and current file to usb drive")
             GPIO.output(12, GPIO.HIGH)  # Turn on LED
-            camera.stop_recording()  # Stop recording
+
+            # Split recording, saving footage up to this point to 'saved' directory
+            camera.split_recording('vids/saved/'+segName)
+
+            # Move most recent file in vids to 'saved' folder
+            files = getVids()  # Get names of files in vids
+            recent = files[-1]  # Get most recent file
+            shutil.move("vids/"+recent, "vids/saved/"+recent)  # move file into 'saved' directory
 
             time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
-            # and so RasPi has a chance to save the video
-
-            # Lock in current file and last one
-            files = os.listdir('vids')
-            try:
-                for f in files:
-                    shutil.move('vids/' + f, '../../../../media/usb')
-            except:
-                print('Video already saved')
-
-            GPIO.output(12, GPIO.LOW)  # Turn off LED
-
-            counter += 1  # Increment counter
-
-            # Start recording again
-            camera.start_recording(segName)
-            print('now recording')
 
         recordTime -= 1  # Decrement recordTime
 
-    # Stop recording
+    # Segment time-out, stop recording
     camera.stop_recording()
-    print('recording stopped, and segment saved as '+segName)
+    print('segment time-out, saving as '+segName)
 
-    # Delete file counter-2 if it exists
-    try:
-        os.remove("vids/dash"+str(counter-2)+".h264")
-        print("removed: vids/dash"+str(counter-2)+".h264")
-    except OSError:
-        pass
-    counter += 1  # Increment counter
-
-    # write counter to file
-    file = open("counter.txt", "w")
-    file.write(str(counter))
-    file.close()
+    # If there are more than 2 files in the vids folder, delete the oldest one
+    files = getVids()
+    os.remove(files[0])
 
     # Make sure LED is off
     GPIO.output(12, GPIO.LOW)
-
