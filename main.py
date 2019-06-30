@@ -19,7 +19,7 @@ GPIO.setup(12, GPIO.OUT)
 
 # Get date and time for file names
 now = datetime.datetime.now()
-segName = now.strftime()+'.h264'
+segName = now.strftime("%Y-%m-%d %H:%M")+'.h264'
 
 # Function for getting names of files in 'vids' folder
 def getVids():
