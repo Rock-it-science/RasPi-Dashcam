@@ -16,6 +16,8 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(12, GPIO.OUT)
+# Make sure LED starts off (sometimes when program exits unexpectedly LED will stay on after program terminates)
+GPIO.output(12, GPIO.LOW)
 
 # Get date and time for file names
 now = datetime.datetime.now()
