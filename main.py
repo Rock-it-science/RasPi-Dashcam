@@ -68,8 +68,9 @@ while True:
             # copy recent file into flash drive
             shutil.copy(files[-1], '/media/usb/')
             # Check if there is more than one file in 'vids' (2 kinda means 1 because one extra clip autosaves)
-            if len(files) > 2:
+            if len(files) > 1:
                 shutil.copy(files[-2], '/media/usb/')
+            if len(files) > 2:
                 # because of autosaving extra clip, do one more to ensure at least 1 full clip is saved
                 shutil.copy(files[-3], '/media/usb/')
 
