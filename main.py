@@ -87,6 +87,7 @@ while True:
     # If there are more than 3 files in the vids folder, delete the oldest one
     files = getVids()
     if len(files) > 3:
+        print('removing '+str(files[0]))
         os.remove(files[0])
 
     # Make sure LED is off
