@@ -59,17 +59,19 @@ while True:
             print("Button pressed, saving last and current file")
             GPIO.output(12, GPIO.HIGH)  # Turn on LED
 
-            # Split recording, saving footage up to this point to 'saved' directory
-            camera.split_recording('vids/saved/'+segName)
+            # Split recording, saving footage up to this point to flash drive
+            camera.split_recording('/media/usb/'+segName)
 
-            # Move 2 most recent files in vids to 'saved' folder
-            # TODO move 'saved' directory to flash drive
+            # Move 2 most recent files in vids to flash drive
             files = getVids()  # Get names of files in vids
 
-            shutil.move(files[-1], "vids/saved/" + os.path.basename(files[-1]))  # move recent file into 'saved' directory
-            if len(files) > 2:  # Check if there is more than one file in 'vids' (2 kinda means 1 because one extra clip autosaves)
-                shutil.move(files[-2], "vids/saved/" + os.path.basename(files[-2]))
-                shutil.move(files[-3], "vids/saved/" + os.path.basename(files[-3]))  # because of autosaving extra clip, do one more 2 ensure at least 1 full clip is saved
+            # move recent file into flash drive
+            shutil.move(files[-1], "/media/usb/" + os.path.basename(files[-1]))
+            # Check if there is more than one file in 'vids' (2 kinda means 1 because one extra clip autosaves)
+            if len(files) > 2:
+                shutil.move(files[-2], "/media/usb/" + os.path.basename(files[-2]))
+                # because of autosaving extra clip, do one more to ensure at least 1 full clip is saved
+                shutil.move(files[-3], "/media/usb/" + os.path.basename(files[-3]))
 
             time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
 
