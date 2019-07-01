@@ -39,8 +39,7 @@ GPIO.output(12, GPIO.LOW)
 while True:
     # Get/update date and time for file names
     now = datetime.datetime.now()
-    segName = 'test.h264'
-    #segName = now.strftime("%Y-%m-%d_%H:%M:%S") + '.h264'
+    segName = now.strftime("%Y-%m-%d_%H-%M-%S") + '.h264'
 
     # Start recording to 'vids' directory
     camera.start_recording("vids/"+segName)
