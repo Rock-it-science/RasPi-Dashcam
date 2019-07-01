@@ -64,7 +64,7 @@ while True:
             # Move 2 most recent files in vids to 'saved' folder
             files = getVids()  # Get names of files in vids
             shutil.move(files[-1], "vids/saved/"+os.path.basename(files[-1]))  # move recent file into 'saved' directory
-            if len(files) > 1: # Check if there is more than one file in 'vids'
+            if len(files) > 1:  # Check if there is more than one file in 'vids'
                 shutil.move(files[-2], "vids/saved/"+os.path.basename(files[-2]))  # move second recent file to 'saved'
 
             time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
@@ -77,10 +77,10 @@ while True:
     camera.stop_recording()
     print('segment time-out, saving as '+segName)
 
-    # If there are more than 2 files in the vids folder, delete the oldest one
-    files = getVids()
-    if len(files) > 2:
-        os.remove(files[0])
+    # If there are more than 3 files in the vids folder, delete the oldest one
+    #files = getVids()
+    #if len(files) > 3:
+    #    os.remove(files[0])
 
     # Make sure LED is off
     GPIO.output(12, GPIO.LOW)
