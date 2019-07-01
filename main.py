@@ -19,11 +19,6 @@ GPIO.setup(12, GPIO.OUT)
 # Make sure LED starts off (sometimes when program exits unexpectedly LED will stay on after program terminates)
 GPIO.output(12, GPIO.LOW)
 
-# Get date and time for file names
-now = datetime.datetime.now()
-segName = now.strftime("%Y-%m-%d %H:%M:%S")+'.h264'
-
-
 # Function for getting names of files in 'vids' folder
 def getVids():
     path = 'vids/'
@@ -41,6 +36,10 @@ GPIO.output(12, GPIO.LOW)
 
 # Main loop for recording
 while True:
+    # Get/update date and time for file names
+    now = datetime.datetime.now()
+    segName = now.strftime("%Y-%m-%d %H:%M:%S") + '.h264'
+
     # Start recording to 'vids' directory
     camera.start_recording("vids/"+segName)
     print('now recording')
@@ -69,6 +68,8 @@ while True:
                 shutil.move(files[-2], "vids/saved/"+os.path.basename(files[-2]))  # move second recent file to 'saved'
 
             time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
+
+            GPIO.output(12, GPIO.LOW)  # Turn off LED
 
         recordTime -= 1  # Decrement recordTime
 
