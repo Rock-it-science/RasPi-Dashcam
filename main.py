@@ -26,6 +26,7 @@ def getVids():
     for r, d, f in os.walk(path):
         for file in f:
             files.append(os.path.join(r, file))
+    files.sort()
     return files
 
 
