@@ -79,7 +79,8 @@ while True:
 
     # If there are more than 2 files in the vids folder, delete the oldest one
     files = getVids()
-    os.remove(files[0])
+    if len(files) > 2:
+        os.remove(files[0])
 
     # Make sure LED is off
     GPIO.output(12, GPIO.LOW)
