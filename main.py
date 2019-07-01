@@ -66,12 +66,12 @@ while True:
             files = getVids()  # Get names of files in vids
 
             # move recent file into flash drive
-            shutil.move(files[-1], "/media/usb/")
+            shutil.move(files[-1], r'/media/usb/')
             # Check if there is more than one file in 'vids' (2 kinda means 1 because one extra clip autosaves)
             if len(files) > 2:
-                shutil.move(files[-2], "/media/usb/")
+                shutil.move(files[-2], r'/media/usb/')
                 # because of autosaving extra clip, do one more to ensure at least 1 full clip is saved
-                shutil.move(files[-3], "/media/usb/")
+                shutil.move(files[-3], r'/media/usb/')
 
             time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
 
