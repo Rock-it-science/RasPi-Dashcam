@@ -65,7 +65,7 @@ while True:
             # TODO move 'saved' directory to flash drive
             files = getVids()  # Get names of files in vids
 
-            print(*files) # Printing all files for debugging
+            print(str(files))  # Printing all files for debugging
 
             shutil.move(files[-1], "vids/saved/"+os.path.basename(files[-1]))  # move recent file into 'saved' directory
             if len(files) > 1:  # Check if there is more than one file in 'vids'
