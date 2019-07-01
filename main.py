@@ -66,8 +66,6 @@ while True:
             # TODO move 'saved' directory to flash drive
             files = getVids()  # Get names of files in vids
 
-            print(str(files))  # Printing all files for debugging
-
             shutil.move(files[-1], "vids/saved/"+os.path.basename(files[-1]))  # move recent file into 'saved' directory
             if len(files) > 1:  # Check if there is more than one file in 'vids'
                 shutil.move(files[-2], "vids/saved/"+os.path.basename(files[-2]))  # move second recent file to 'saved'
@@ -83,9 +81,9 @@ while True:
     print('segment time-out, saving as '+segName)
 
     # If there are more than 3 files in the vids folder, delete the oldest one
-    #files = getVids()
-    #if len(files) > 3:
-    #    os.remove(files[0])
+    files = getVids()
+    if len(files) > 3:
+        os.remove(files[0])
 
     # Make sure LED is off
     GPIO.output(12, GPIO.LOW)
