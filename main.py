@@ -62,7 +62,11 @@ while True:
             camera.split_recording('vids/saved/'+segName)
 
             # Move 2 most recent files in vids to 'saved' folder
+            # TODO move 'saved' directory to flash drive
             files = getVids()  # Get names of files in vids
+
+            print(*files) # Printing all files for debugging
+
             shutil.move(files[-1], "vids/saved/"+os.path.basename(files[-1]))  # move recent file into 'saved' directory
             if len(files) > 1:  # Check if there is more than one file in 'vids'
                 shutil.move(files[-2], "vids/saved/"+os.path.basename(files[-2]))  # move second recent file to 'saved'
