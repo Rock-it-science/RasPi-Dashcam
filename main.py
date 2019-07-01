@@ -46,7 +46,7 @@ while True:
     print('now recording')
 
     # Start recording, but stop if button is pressed
-    recordTime = 600  # Seconds per segment (approximately, actual time will be slightly longer)
+    recordTime = 10  # Seconds per segment (approximately, actual time will be slightly longer)
     while recordTime > 0:
 
         try:
