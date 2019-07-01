@@ -23,6 +23,7 @@ GPIO.output(12, GPIO.LOW)
 now = datetime.datetime.now()
 segName = now.strftime("%Y-%m-%d %H:%M")+'.h264'
 
+
 # Function for getting names of files in 'vids' folder
 def getVids():
     path = 'vids/'
@@ -31,6 +32,12 @@ def getVids():
         for file in f:
             files.append(os.path.join(r, file))
     return files
+
+
+# Flash LED to show program is running
+GPIO.output(12, GPIO.HIGH)
+time.sleep(0.2)
+GPIO.output(12, GPIO.LOW)
 
 # Main loop for recording
 while True:
@@ -58,7 +65,7 @@ while True:
             # Move most recent file in vids to 'saved' folder
             files = getVids()  # Get names of files in vids
             recent = files[-1]  # Get most recent file
-            shutil.move(recent, "vids/saved/"+os.path.basename(recent))  # move file into 'saved' directory (TODO change this to relative path)
+            shutil.move(recent, "vids/saved/"+os.path.basename(recent))  # move file into 'saved' directory
 
             time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
 
