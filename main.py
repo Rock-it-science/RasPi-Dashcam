@@ -21,7 +21,7 @@ GPIO.output(12, GPIO.LOW)
 
 # Get date and time for file names
 now = datetime.datetime.now()
-segName = now.strftime("%Y-%m-%d %H:%M")+'.h264'
+segName = now.strftime("%Y-%m-%d %H:%M:%S")+'.h264'
 
 
 # Function for getting names of files in 'vids' folder
@@ -62,10 +62,11 @@ while True:
             # Split recording, saving footage up to this point to 'saved' directory
             camera.split_recording('vids/saved/'+segName)
 
-            # Move most recent file in vids to 'saved' folder
+            # Move 2 most recent files in vids to 'saved' folder
             files = getVids()  # Get names of files in vids
-            recent = files[-1]  # Get most recent file
-            shutil.move(recent, "vids/saved/"+os.path.basename(recent))  # move file into 'saved' directory
+            shutil.move(files[-1], "vids/saved/"+os.path.basename(files[-1]))  # move recent file into 'saved' directory
+            if len(files) > 1: # Check if there is more than one file in 'vids'
+                shutil.move(files[-2], "vids/saved/"+os.path.basename(files[-2]))  # move second recent file to 'saved'
 
             time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
 
