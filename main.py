@@ -21,7 +21,7 @@ GPIO.output(12, GPIO.LOW)
 
 # Function for getting names of files in 'vids' folder
 def getVids():
-    path = 'vids/'
+    path = '/home/pi/projects/RasPi-Dashcam/vids/'  # Absolute path to 'vids' folder
     files = []
     for r, d, f in os.walk(path):
         for file in f:
@@ -42,7 +42,7 @@ while True:
     segName = now.strftime("%Y-%m-%d_%H-%M-%S") + '.h264'
 
     # Start recording to 'vids' directory
-    camera.start_recording("vids/"+segName)
+    camera.start_recording("/home/pi/projects/RasPi-Dashcam/vids/"+segName)  # Absolute path to 'vids' folder
     print('now recording')
 
     # Start recording, but stop if button is pressed
