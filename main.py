@@ -21,7 +21,7 @@ GPIO.output(12, GPIO.LOW)
 
 # Function for getting names of files in 'vids' folder
 def getVids():
-    path = '/home/pi/projects/RasPi-Dashcam/vids/'  # Absolute path to 'vids' folder
+    path = '~/git/RasPi-Dashcam/vids/'  # Absolute path to 'vids' folder
     files = []
     for r, d, f in os.walk(path):
         for file in f:
