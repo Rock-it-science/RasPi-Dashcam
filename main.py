@@ -42,7 +42,7 @@ while True:
     segName = now.strftime("%Y-%m-%d_%H-%M-%S") + '.h264'
 
     # Start recording to 'vids' directory
-    camera.start_recording("/home/pi/projects/RasPi-Dashcam/vids/"+segName)  # Absolute path to 'vids' folder
+    camera.start_recording('~/git/RasPi-Dashcam/vids/' + segName)  # Absolute path to 'vids' folder
     print('now recording')
 
     # Start recording, but stop if button is pressed
