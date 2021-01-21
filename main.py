@@ -46,8 +46,8 @@ while True:
 
     # Start recording, but stop if button is pressed
     recordTime = 600  # Seconds per segment (approximately, actual time will be slightly longer)
+    print('now recording')
     while recordTime > 0:
-        print('now recording')
         try:
             camera.wait_recording(1)
         except:
