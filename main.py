@@ -27,7 +27,6 @@ def getVids():
         for file in f:
             files.append(os.path.join(r, file))
     files.sort()
-    print(files) # for testing
     return files
 
 
@@ -44,12 +43,11 @@ while True:
 
     # Start recording to 'vids' directory
     camera.start_recording('vids/' + segName)  # Path to 'vids' folder
-    print('now recording')
 
     # Start recording, but stop if button is pressed
     recordTime = 600  # Seconds per segment (approximately, actual time will be slightly longer)
     while recordTime > 0:
-
+        print('now recording')
         try:
             camera.wait_recording(1)
         except:
@@ -81,8 +79,9 @@ while True:
                 # Flash LED 5 times
                 for x in range(5):
                     GPIO.output(12, GPIO.LOW)
-                    time.sleep(0.3)
+                    time.sleep(0.5)
                     GPIO.output(12, GPIO.HIGH)
+                    time.sleep(0.5)
 
             GPIO.output(12, GPIO.LOW)  # Turn off LED
 
