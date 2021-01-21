@@ -27,6 +27,7 @@ def getVids():
         for file in f:
             files.append(os.path.join(r, file))
     files.sort()
+    print(files) # for testing
     return files
 
 
@@ -58,23 +59,30 @@ while True:
         if GPIO.input(10) == GPIO.HIGH:
             print("Button pressed, saving last and current file")
             GPIO.output(12, GPIO.HIGH)  # Turn on LED
+            try: # Export to usb drive
+                # Split recording, saving footage up to this point to flash drive
+                camera.split_recording('/media/usb/'+segName)
 
-            # Split recording, saving footage up to this point to flash drive
-            camera.split_recording('/media/usb/'+segName)
+                # Move 2 most recent files in vids to flash drive
+                files = getVids()  # Get names of files in vids
 
-            # Move 2 most recent files in vids to flash drive
-            files = getVids()  # Get names of files in vids
+                # copy recent file into flash drive
+                shutil.copy(files[-1], '/media/usb/')
+                # Check if there is more than one file in 'vids' (2 kinda means 1 because one extra clip autosaves)
+                if len(files) > 1:
+                    shutil.copy(files[-2], '/media/usb/')
+                if len(files) > 2:
+                    # because of autosaving extra clip, do one more to ensure at least 1 full clip is saved
+                    shutil.copy(files[-3], '/media/usb/')
 
-            # copy recent file into flash drive
-            shutil.copy(files[-1], '/media/usb/')
-            # Check if there is more than one file in 'vids' (2 kinda means 1 because one extra clip autosaves)
-            if len(files) > 1:
-                shutil.copy(files[-2], '/media/usb/')
-            if len(files) > 2:
-                # because of autosaving extra clip, do one more to ensure at least 1 full clip is saved
-                shutil.copy(files[-3], '/media/usb/')
-
-            time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
+                time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
+            except: # Error in exporting
+                print("Error exporting file")
+                # Flash LED 5 times
+                for x in range(5):
+                    GPIO.output(12, GPIO.LOW)
+                    time.sleep(0.3)
+                    GPIO.output(12, GPIO.HIGH)
 
             GPIO.output(12, GPIO.LOW)  # Turn off LED
 
