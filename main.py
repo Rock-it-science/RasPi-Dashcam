@@ -32,7 +32,7 @@ def getVids():
 
 # Flash LED to show program is running
 GPIO.output(12, GPIO.HIGH)
-time.sleep(0.2)
+time.sleep(0.5)
 GPIO.output(12, GPIO.LOW)
 
 # Main loop for recording
