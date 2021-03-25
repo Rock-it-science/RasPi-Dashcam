@@ -14,7 +14,7 @@ Known issues:
 
 # Logging setup
 logFile = open("log.txt", "a")
-logFile.write(str(datetime.now()) + "    Initializing\n")
+logFile.write("\n" + str(datetime.now()) + "    Initializing\n")
 
 # Camera setup
 try:
