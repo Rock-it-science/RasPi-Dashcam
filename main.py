@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import os
 import picamera
 import RPi.GPIO as GPIO
@@ -9,21 +9,29 @@ import time
 '''
 Known issues:
  - hung on exporting files to usb
+
 '''
 
+# Logging setup
+logFile = open("log.txt", "a")
+logFile.write(datetime.now, "    Initializing")
 
 # Camera setup
-camera = picamera.PiCamera()
-camera.resolution = (640, 480)
-camera.rotation = 180
+try:
+    camera = picamera.PiCamera()
+    camera.resolution = (640, 480)
+    camera.rotation = 180
 
-# GPIO setup for button and LED
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(12, GPIO.OUT)
-# Make sure LED starts off (sometimes when program exits unexpectedly LED will stay on after program terminates)
-GPIO.output(12, GPIO.LOW)
+    # GPIO setup for button and LED
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.setup(12, GPIO.OUT)
+    # Make sure LED starts off (sometimes when program exits unexpectedly LED will stay on after program terminates)
+    GPIO.output(12, GPIO.LOW)
+except:
+    logFile.write(datetime.now, "    Failure in setup")
+    sys.exit('Failure in setup')
 
 # Function for getting names of files in 'vids' folder
 def getVids():
@@ -41,6 +49,8 @@ GPIO.output(12, GPIO.HIGH)
 time.sleep(0.5)
 GPIO.output(12, GPIO.LOW)
 
+logFile.write(datetime.now, "    Initialization complete")
+
 # Main loop for recording
 while True:
     # Get/update date and time for file names
@@ -53,14 +63,18 @@ while True:
     # Start recording, but stop if button is pressed
     recordTime = 600  # Seconds per segment (approximately, actual time will be slightly longer)
     print('now recording')
+    logFile.write(datetime.now, "    Recording started, file name: ", segName)
     while recordTime > 0:
         try:
             camera.wait_recording(1)
         except:
             camera.stop_recording()
+            logFile.write(datetime.now, "    Exit due to keyboard interrupt\n")
+            logFile.close()
             sys.exit('Keyboard interrupt')
 
         if GPIO.input(10) == GPIO.HIGH:
+            logFile.write(datetime.now, "    Registered button press")
             print("Button pressed, saving last and current file")
             GPIO.output(12, GPIO.HIGH)  # Turn on LED
             try: # Export to usb drive
@@ -79,9 +93,11 @@ while True:
                     # because of autosaving extra clip, do one more to ensure at least 1 full clip is saved
                     shutil.copy(files[-3], '/media/usb/')
 
+                logFile.write(datetime.now, "    Saved clip ', segName, ', continuing to record")
                 print('Saved clip ', segName, ', continuing to record')
                 time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
-            except: # Error in exporting
+            except Exception as e: # Error in exporting
+                logFile.write(datetime.now, "    Error exporting file ", segName, e)
                 print("Error exporting file")
                 # Flash LED 5 times
                 for x in range(5):
@@ -89,6 +105,7 @@ while True:
                     time.sleep(0.5)
                     GPIO.output(12, GPIO.HIGH)
                     time.sleep(0.5)
+                exit()
 
             GPIO.output(12, GPIO.LOW)  # Turn off LED
 
@@ -97,10 +114,12 @@ while True:
     # Segment time-out, stop recording
     camera.stop_recording()
     print('segment time-out, saving as '+segName)
+    logFile.write(datetime.now, "    Segment time-out saving ", segName)
 
     # If there are more than 3 files in the vids folder, delete the oldest one
     files = getVids()
     if len(files) > 3:
+        logFile.write(datetime.now, "    Removing file ", str(files[0]))
         print('removing '+str(files[0]))
         os.remove(files[0])
 
