@@ -54,7 +54,7 @@ logFile.write(str(datetime.now()) + "    Initialization complete\n")
 # Main loop for recording
 while True:
     # Get/update date and time for file names
-    now = datetime.datetime.now()
+    now = datetime.now()
     segName = now.strftime("%Y-%m-%d_%H-%M-%S") + '.h264'
 
     # Start recording to 'vids' directory
