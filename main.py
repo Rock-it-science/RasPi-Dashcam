@@ -6,6 +6,12 @@ import sys
 import shutil
 import time
 
+'''
+Known issues:
+ - hung on exporting files to usb
+'''
+
+
 # Camera setup
 camera = picamera.PiCamera()
 camera.resolution = (640, 480)
@@ -73,6 +79,7 @@ while True:
                     # because of autosaving extra clip, do one more to ensure at least 1 full clip is saved
                     shutil.copy(files[-3], '/media/usb/')
 
+                print('Saved clip ', segName, ', continuing to record')
                 time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
             except: # Error in exporting
                 print("Error exporting file")
