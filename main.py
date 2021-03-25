@@ -93,7 +93,7 @@ while True:
                     # because of autosaving extra clip, do one more to ensure at least 1 full clip is saved
                     shutil.copy(files[-3], '/media/usb/')
 
-                logFile.write(str(datetime.now()) + "    Saved clip ', segName, ', continuing to record\n")
+                logFile.write(str(datetime.now()) + "    Saved clip " + segName + ", continuing to record\n")
                 print('Saved clip ', segName, ', continuing to record')
                 time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
             except Exception as e: # Error in exporting
