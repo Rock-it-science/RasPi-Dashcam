@@ -94,8 +94,14 @@ while True:
                     shutil.copy(files[-3], '/media/usb/')
 
                 logFile.write(str(datetime.now()) + "    Saved clip " + segName + ", continuing to record\n")
-                print('Saved clip ', segName, ', continuing to record')
-                time.sleep(0.5)  # Add a small buffer so button press doesn't overlap with next check for button check
+                print('Saved clip ' + segName + ', continuing to record')
+                
+                # New segment name
+                segName = now.strftime("%Y-%m-%d_%H-%M-%S") + '.h264'
+
+                # Add a small buffer so button press doesn't overlap with next check for button check
+                time.sleep(0.5)
+
             except Exception as e: # Error in exporting
                 logFile.write(str(datetime.now()) + "    Error exporting file " + segName + e +"\n")
                 print("Error exporting file")
@@ -125,3 +131,5 @@ while True:
 
     # Make sure LED is off
     GPIO.output(12, GPIO.LOW)
+
+    # Repeat loop
