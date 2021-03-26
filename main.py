@@ -54,8 +54,7 @@ logFile.write(str(datetime.now()) + "    Initialization complete\n")
 # Main loop for recording
 while True:
     # Get/update date and time for file names
-    now = datetime.now()
-    segName = now.strftime("%Y-%m-%d_%H-%M-%S") + '.h264'
+    segName = datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + '.h264'
 
     # Start recording to 'vids' directory
     camera.start_recording('vids/' + segName)  # Path to 'vids' folder
@@ -97,7 +96,7 @@ while True:
                 print('Saved clip ' + segName + ', continuing to record')
                 
                 # New segment name
-                segName = now.strftime("%Y-%m-%d_%H-%M-%S") + '.h264'
+                segName = datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + '.h264'
 
                 # Add a small buffer so button press doesn't overlap with next check for button check
                 time.sleep(0.5)
