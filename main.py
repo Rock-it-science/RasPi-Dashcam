@@ -121,9 +121,9 @@ while True:
     print('segment time-out, saving as '+segName)
     logFile.write(str(datetime.now()) + "    Segment time-out saving " + segName + "\n")
 
-    # If there are more than 3 files in the vids folder, delete the oldest one
+    # While there are more than 3 files in the vids folder, delete the oldest one
     files = getVids()
-    if len(files) > 3:
+    while len(files) > 3:
         logFile.write(str(datetime.now()) + "    Removing file " + str(files[0]) + "\n")
         print('removing '+str(files[0]))
         os.remove(files[0])
