@@ -121,6 +121,7 @@ while True:
         logFile.write(str(datetime.now()) + "    Removing file " + str(files[0]) + "\n")
         print('removing '+str(files[0]))
         os.remove(files[0])
+        file = getVids()
 
     # Make sure LED is off
     GPIO.output(12, GPIO.LOW)
