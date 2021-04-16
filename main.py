@@ -6,12 +6,6 @@ import sys
 import shutil
 import time
 
-'''
-Known issues:
- - hung on exporting files to usb
-
-'''
-
 # Logging setup
 logFile = open("log.txt", "a")
 logFile.write("\n" + str(datetime.now()) + "    Initializing\n")
