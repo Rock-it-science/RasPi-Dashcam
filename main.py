@@ -7,7 +7,7 @@ import shutil
 import time
 
 # Logging setup
-logFile = open("log.txt", "a")
+logFile = open("/media/usb/log.txt", "a")
 logFile.write("\n" + str(datetime.now()) + "    Initializing\n")
 
 # Camera setup
