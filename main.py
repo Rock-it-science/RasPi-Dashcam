@@ -23,8 +23,9 @@ try:
     GPIO.setup(12, GPIO.OUT)
     # Make sure LED starts off (sometimes when program exits unexpectedly LED will stay on after program terminates)
     GPIO.output(12, GPIO.LOW)
-except:
+except: # failure in setup
     logFile.write(str(datetime.now()) + "    Failure in setup\n")
+    logFile.close()
     sys.exit('Failure in setup')
 
 # Function for getting names of files in 'vids' folder
@@ -44,6 +45,7 @@ time.sleep(0.5)
 GPIO.output(12, GPIO.LOW)
 
 logFile.write(str(datetime.now()) + "    Initialization complete\n")
+logFile.flush()
 
 # Main loop for recording
 while True:
@@ -57,6 +59,7 @@ while True:
     recordTime = 600  # Seconds per segment (approximately, actual time will be slightly longer)
     print('now recording')
     logFile.write(str(datetime.now()) + "    Recording started, file name: " + segName + "\n")
+    logFile.flush()
     while recordTime > 0:
         try:
             camera.wait_recording(1)
@@ -68,6 +71,7 @@ while True:
 
         if GPIO.input(10) == GPIO.HIGH:
             logFile.write(str(datetime.now()) + "    Registered button press\n")
+            logFile.flush()
             print("Button pressed, saving last and current file")
             GPIO.output(12, GPIO.HIGH)  # Turn on LED
             try: # Export to usb drive
@@ -87,6 +91,7 @@ while True:
                     shutil.copy(files[-3], '/media/usb/')
 
                 logFile.write(str(datetime.now()) + "    Saved clip " + segName + ", continuing to record\n")
+                logFile.flush()
                 print('Saved clip ' + segName + ', continuing to record')
                 
                 # New segment name
@@ -97,6 +102,7 @@ while True:
 
             except Exception as e: # Error in exporting
                 logFile.write(str(datetime.now()) + "    Error exporting file " + segName + e +"\n")
+                logFile.close()
                 print("Error exporting file")
                 # Flash LED 5 times
                 for x in range(5):
@@ -112,13 +118,15 @@ while True:
 
     # Segment time-out, stop recording
     camera.stop_recording()
-    print('segment time-out, saving as '+segName)
+    print('segment time-out, saving as ' + segName)
     logFile.write(str(datetime.now()) + "    Segment time-out saving " + segName + "\n")
+    logFile.flush()
 
     # While there are more than 3 files in the vids folder, delete the oldest one
     files = getVids()
     while len(files) > 3:
         logFile.write(str(datetime.now()) + "    Removing file " + str(files[0]) + "\n")
+        logFile.flush()
         print('removing '+str(files[0]))
         os.remove(files[0])
         file = getVids()
