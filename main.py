@@ -129,7 +129,7 @@ while True:
         logFile.flush()
         print('removing '+str(files[0]))
         os.remove(files[0])
-        file = getVids()
+        files = getVids()
 
     # Make sure LED is off
     GPIO.output(12, GPIO.LOW)
